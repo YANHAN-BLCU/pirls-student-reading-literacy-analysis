@@ -1,0 +1,56 @@
+# Secrets and local configuration
+05_密钥凭据/
+*.pem
+.env
+.env.*
+!.env.example
+
+# Python
+**/.venv/
+**/venv/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# R
+*.RData
+*.Rhistory
+**/.Rproj.user/
+
+# PIRLS raw and derived datasets
+pirls2021/P21_Data_R/Data/
+pirls2021/P21_Data_SAS/Data/
+01_数据文件/
+数据预处理/A5/
+数据预处理/ASG/
+数据预处理/R5/
+数据预处理/字段分类/
+数据预处理/merged_data.xlsx
+国际中文/表头2021/
+国际中文/newLPA.xlsx
+国际中文/analysis_code/data/
+国际中文/analysis_code/mplus_temp/
+
+# Large generated output
+2026031510-源码/education_dashboard.html
+
+# Binary data, archives, installers, and office documents
+*.sas7bdat
+*.xlsx
+*.xls
+*.csv
+*.zip
+*.msi
+*.dat
+*.out
+*.pdf
+*.doc
+*.docx
+*.pptx
+
+# Editors and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+~$*

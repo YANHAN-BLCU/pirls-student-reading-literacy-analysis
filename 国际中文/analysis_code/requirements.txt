@@ -1,0 +1,8 @@
+# PIRLS 2021 LPA分析 - R包依赖清单
+# 此文件仅作参考，安装由 00_init_environment.R 自动处理
+
+# 核心包（自动安装）
+tidyverse                 # 数据处理框架
+tidyLPA                   # 潜在剖面分析
+mice                      # 多重插补
+openxlsx                  # 读写Excel文件

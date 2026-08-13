@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 小助理 - 国际学生阅读素养分析系统</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f4ff; color: #1f2937; }
+    body { display: flex; flex-direction: column; }
+
+    /* ── Header ── */
+    .header {
+      width: 100%; height: 72px; flex-shrink: 0;
+      background: rgba(255,255,255,0.92); backdrop-filter: blur(20px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 7%; position: fixed; top: 0; left: 0; z-index: 999;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    .logo { font-size: 20px; font-weight: 800; color: #1e1b4b; letter-spacing: .5px; }
+    .logo span { color: #7c3aed; }
+    .nav { display: flex; gap: 42px; align-items: center; }
+    .nav-item {
+      font-size: 15px; color: #374151; font-weight: 500; cursor: pointer;
+      transition: .3s; position: relative; padding: 6px 0; text-decoration: none;
+    }
+    .nav-item::after {
+      content:''; position:absolute; bottom:0; left:50%; width:0; height:3px;
+      background:#7c3aed; transform:translateX(-50%); border-radius:3px; transition:.3s;
+    }
+    .nav-item:hover { color:#7c3aed; }
+    .nav-item:hover::after, .nav-item.active::after { width:110%; }
+    .nav-item.active { color:#7c3aed; font-weight:600; }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: #f3f4f6;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #374151;
+      text-decoration: none;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .back-btn:hover {
+      background: #e5e7eb;
+      color: #7c3aed;
+    }
+
+
+    .workspace {
+      margin-top: 72px;
+      flex: 1; display: flex; min-height: 0;
+    }
+
+    /* ── Chat panel (left) ── */
+    .chat-panel {
+      flex: 1; display: flex; flex-direction: column; min-height: 0;
+      padding: 32px 0 0 7%;
+    }
+    .chat-panel-inner {
+      flex: 1; display: flex; flex-direction: column; min-height: 0;
+      background: #fff; border-radius: 28px 28px 0 0;
+      box-shadow: 0 -2px 40px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    /* Messages area */
+    .chat-messages {
+      flex: 1; overflow-y: auto; padding: 40px 44px;
+      scroll-behavior: smooth;
+    }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
+
+    /* Welcome / empty state */
+    .welcome-state { text-align: center; padding: 48px 0 32px; animation: fadeUp .6s ease; }
+    .welcome-icon { font-size: 64px; margin-bottom: 20px; }
+    .welcome-title { font-size: 28px; font-weight: 800; color: #1e1b4b; margin-bottom: 12px; }
+    .welcome-sub { font-size: 15px; color: #6b7280; margin-bottom: 44px; line-height: 1.7; }
+
+    .recommend-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; }
+    .recommend-item {
+      padding: 18px 22px; background: #f9fafb;
+      border: 1px solid rgba(0,0,0,0.06); border-radius: 16px;
+      font-size: 14px; color: #374151; cursor: pointer; transition: .25s; text-align: left;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .recommend-item .ri-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .recommend-item:hover {
+      background: rgba(124,58,237,.07); border-color: rgba(124,58,237,.25);
+      color: #7c3aed; transform: translateY(-3px); box-shadow: 0 6px 18px rgba(124,58,237,.1);
+    }
+
+    /* Message bubbles */
+    .msg-row { display: flex; gap: 14px; margin-bottom: 28px; animation: fadeUp .3s ease; }
+    .msg-row.user { flex-direction: row-reverse; }
+    .msg-avatar {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 700;
+    }
+    .msg-row.user .msg-avatar { background: linear-gradient(135deg, #7c3aed, #a855f7); color: #fff; font-size: 14px; }
+    .msg-row.assistant .msg-avatar { background: #f3f4f6; }
+    .msg-bubble {
+      max-width: 72%; padding: 16px 20px; border-radius: 20px;
+      font-size: 15px; line-height: 1.75; word-break: break-word;
+    }
+    .msg-row.user .msg-bubble {
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: #fff; border-bottom-right-radius: 6px;
+    }
+    .msg-row.assistant .msg-bubble {
+      background: #f9fafb; color: #1f2937;
+      border: 1px solid rgba(0,0,0,0.06); border-bottom-left-radius: 6px;
+    }
+
+    /* Markdown inside bubble */
+    .msg-bubble h2 { font-size: 17px; font-weight: 700; margin: 16px 0 8px; color: #1e1b4b; }
+    .msg-bubble h3 { font-size: 15px; font-weight: 700; margin: 14px 0 6px; color: #374151; }
+    .msg-bubble h4 { font-size: 14px; font-weight: 700; margin: 12px 0 4px; }
+    .msg-bubble p { margin: 0 0 10px; }
+    .msg-bubble p:last-child { margin-bottom: 0; }
+    .msg-bubble ul, .msg-bubble ol { padding-left: 20px; margin: 8px 0; }
+    .msg-bubble li { margin: 4px 0; }
+    .msg-bubble strong { font-weight: 700; }
+    .msg-bubble em { font-style: italic; }
+    .msg-bubble code {
+      background: rgba(0,0,0,0.08); padding: 1px 6px; border-radius: 5px;
+      font-family: "Consolas","Courier New",monospace; font-size: 13px;
+    }
+    .msg-row.user .msg-bubble code { background: rgba(255,255,255,0.2); }
+    .msg-bubble pre {
+      background: #1e1b4b; color: #e2e8f0; padding: 16px 20px; border-radius: 12px;
+      margin: 12px 0; overflow-x: auto; font-size: 13px; line-height: 1.6;
+    }
+    .msg-bubble pre code { background: transparent; padding: 0; color: inherit; font-size: inherit; }
+    .msg-row.user .msg-bubble pre { background: rgba(0,0,0,0.3); }
+
+    /* Typing cursor */
+    .typing-cursor::after { content: '▌'; animation: blink .6s step-end infinite; color: #7c3aed; }
+    .msg-row.user .msg-bubble.typing-cursor::after { color: rgba(255,255,255,0.7); }
+    @keyframes blink { 0%,100%{ opacity:1 } 50%{ opacity:0 } }
+
+    /* Thinking dots */
+    .thinking-dots { display: flex; gap: 6px; padding: 4px 0; }
+    .thinking-dots span {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #9ca3af; animation: dot-bounce 1.2s ease infinite;
+    }
+    .thinking-dots span:nth-child(2) { animation-delay: .2s; }
+    .thinking-dots span:nth-child(3) { animation-delay: .4s; }
+    @keyframes dot-bounce { 0%,80%,100%{ transform:scale(1) } 40%{ transform:scale(1.4); background:#7c3aed; } }
+
+    /* Input area */
+    .input-area {
+      flex-shrink: 0; padding: 20px 44px 28px;
+      background: #fff; border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    .input-row { display: flex; gap: 14px; align-items: flex-end; }
+    .input-textarea {
+      flex: 1; padding: 14px 20px; border-radius: 16px;
+      border: 1.5px solid rgba(0,0,0,0.1); outline: none;
+      font-size: 15px; font-family: inherit; resize: none;
+      min-height: 52px; max-height: 120px; line-height: 1.6;
+      transition: border-color .2s, box-shadow .2s;
+      color: #1f2937;
+    }
+    .input-textarea:focus { border-color: rgba(124,58,237,.4); box-shadow: 0 0 0 4px rgba(124,58,237,.08); }
+    .input-textarea::placeholder { color: #9ca3af; }
+    .send-btn {
+      height: 52px; padding: 0 32px; background: #7c3aed; color: #fff;
+      border: none; border-radius: 16px; font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: .25s; white-space: nowrap; flex-shrink: 0;
+    }
+    .send-btn:hover { background: #6d28d9; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(124,58,237,.25); }
+    .send-btn:disabled { background: #d1d5db; cursor: not-allowed; transform: none; box-shadow: none; }
+    .input-hint { font-size: 12px; color: #9ca3af; margin-top: 8px; padding-left: 2px; }
+
+    /* ── Sidebar (right) ── */
+    .chat-sidebar {
+      width: 340px; flex-shrink: 0;
+      display: flex; flex-direction: column;
+      padding: 32px 7% 0 24px;
+      min-height: 0;
+    }
+    .sidebar-inner {
+      flex: 1; display: flex; flex-direction: column; min-height: 0;
+      background: #fff; border-radius: 28px 28px 0 0;
+      box-shadow: 0 -2px 40px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+    .new-chat-btn {
+      margin: 24px 24px 0; padding: 14px 20px;
+      background: linear-gradient(135deg, #7c3aed, #6d28d9);
+      color: #fff; border: none; border-radius: 16px;
+      font-size: 15px; font-weight: 600; cursor: pointer;
+      transition: .25s; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .new-chat-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(124,58,237,.3); }
+
+    .sidebar-title {
+      padding: 20px 24px 12px; font-size: 14px; font-weight: 700;
+      color: #6b7280; letter-spacing: .5px; text-transform: uppercase;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .history-scroll { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .history-scroll::-webkit-scrollbar { width: 3px; }
+    .history-scroll::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
+
+    .history-empty {
+      padding: 60px 24px; text-align: center;
+      color: #9ca3af; font-size: 14px; line-height: 1.7;
+    }
+    .history-empty-icon { font-size: 36px; margin-bottom: 12px; display: block; }
+
+    .history-item {
+      padding: 14px 24px; cursor: pointer; transition: .2s;
+      border-left: 3px solid transparent; position: relative;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .history-item:hover { background: rgba(124,58,237,.04); border-left-color: rgba(124,58,237,.3); }
+    .history-item.active { background: rgba(124,58,237,.07); border-left-color: #7c3aed; }
+    .history-item-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .history-item-body { flex: 1; min-width: 0; }
+    .history-item-title { font-size: 14px; color: #374151; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .history-item.active .history-item-title { color: #7c3aed; }
+    .history-item-time { font-size: 12px; color: #9ca3af; margin-top: 3px; }
+    .history-item-del {
+      opacity: 0; font-size: 14px; color: #9ca3af; cursor: pointer;
+      padding: 2px 4px; border-radius: 4px; transition: .2s; flex-shrink: 0;
+    }
+    .history-item:hover .history-item-del { opacity: 1; }
+    .history-item-del:hover { color: #ef4444; background: rgba(239,68,68,.1); }
+
+    /* ── Footer ── */
+    .footer {
+      background: #111827; padding: 48px 7%;
+      display: flex; justify-content: center; gap: 60px;
+    }
+    .footer a { color: #9ca3af; font-size: 14px; text-decoration: none; transition: .3s; }
+    .footer a:hover { color: #fff; }
+    .footer-line { height: 8px; background: linear-gradient(90deg, #7c3aed, #ec4899, #fb923c, #ffd166); }
+
+    /* Error bubble */
+    .msg-error {
+      background: rgba(239,68,68,.08) !important;
+      border-color: rgba(239,68,68,.2) !important;
+      color: #dc2626 !important;
+    }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+    @media (max-width: 900px) {
+      .chat-sidebar { display: none; }
+      .chat-panel { padding: 24px 0 0 4%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<div class="header">
+  <div class="logo">数据洞察 <span>平台</span></div>
+  <div class="nav">
+    <a href="vue-charts.html" class="nav-item">可视化分析</a>
+    <a href="data-self.html" class="nav-item">自助数据</a>
+    <a href="ai.html" class="nav-item active">小助理</a>
+    <a href="index.html" class="back-btn">← 返回主页</a>
+  </div>
+</div>
+
+<!-- ── Workspace ── -->
+<div class="workspace">
+
+  <!-- Left: Chat Panel -->
+  <div class="chat-panel">
+    <div class="chat-panel-inner">
+
+      <!-- Messages -->
+      <div class="chat-messages" id="chatMessages">
+        <div class="welcome-state" id="welcomeState">
+          <div class="welcome-icon">🤖</div>
+          <div class="welcome-title">你好，我是 AI 小助理</div>
+          <div class="welcome-sub">
+            专注于国际学生阅读素养分析 · 基于 PISA 框架<br>
+            数据解读 · 政策分析 · 教学策略建议
+          </div>
+          <div class="recommend-grid" id="recommendGrid">
+            <div class="recommend-item" onclick="sendRecommend(this.dataset.q)" data-q="PISA阅读素养测评框架的核心维度是什么？">
+              <span class="ri-icon">📊</span>PISA阅读素养测评框架的核心维度是什么？
+            </div>
+            <div class="recommend-item" onclick="sendRecommend(this.dataset.q)" data-q="国际学生阅读能力的分级标准和评分机制是怎样的？">
+              <span class="ri-icon">📐</span>国际学生阅读能力的分级标准和评分机制是怎样的？
+            </div>
+            <div class="recommend-item" onclick="sendRecommend(this.dataset.q)" data-q="如何提升学生的信息提取与推断理解能力？">
+              <span class="ri-icon">🎯</span>如何提升学生的信息提取与推断理解能力？
+            </div>
+            <div class="recommend-item" onclick="sendRecommend(this.dataset.q)" data-q="请分析中国学生与OECD均值的阅读素养差异">
+              <span class="ri-icon">🌏</span>请分析中国学生与OECD均值的阅读素养差异
+            </div>
+            <div class="recommend-item" onclick="sendRecommend(this.dataset.q)" data-q="培养批判性阅读能力有哪些有效教学策略？">
+              <span class="ri-icon">💡</span>培养批判性阅读能力有哪些有效教学策略？
+            </div>
+            <div class="recommend-item" onclick="sendRecommend(this.dataset.q)" data-q="影响学生阅读素养的关键因素有哪些？请结合数据分析">
+              <span class="ri-icon">🔍</span>影响学生阅读素养的关键因素有哪些？请结合数据分析
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input -->
+      <div class="input-area">
+        <div class="input-row">
+          <textarea
+            class="input-textarea"
+            id="inputText"
+            placeholder="请输入问题，例如：分析2022年PISA阅读素养数据趋势..."
+            rows="1"
+          ></textarea>
+          <button class="send-btn" id="sendBtn" onclick="handleSend()">发 送</button>
+        </div>
+        <div class="input-hint">Enter 发送 · Shift+Enter 换行</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Right: Sidebar -->
+  <div class="chat-sidebar">
+    <div class="sidebar-inner">
+      <button class="new-chat-btn" onclick="newChat()">
+        <span>＋</span> 新对话
+      </button>
+      <div class="sidebar-title">历史记录</div>
+      <div class="history-scroll" id="historyList"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Footer ── -->
+<div class="footer">
+  <a href="#">隐私政策</a>
+  <a href="#">服务条款</a>
+  <a href="#">联系我们</a>
+</div>
+<div class="footer-line"></div>
+
+<script>
+// ── State ──
+let conversations = JSON.parse(localStorage.getItem('ai_conversations') || '[]');
+let currentId = null;
+let isStreaming = false;
+
+// ── Init ──
+renderHistoryList();
+
+// ── Textarea auto-resize + Enter to send ──
+const inputEl = document.getElementById('inputText');
+inputEl.addEventListener('input', () => {
+  inputEl.style.height = 'auto';
+  inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
+});
+inputEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+});
+
+// ── Send from recommended question ──
+function sendRecommend(text) {
+  inputEl.value = text;
+  handleSend();
+}
+
+// ── Main send handler ──
+async function handleSend() {
+  const text = inputEl.value.trim();
+  if (!text || isStreaming) return;
+
+  // Init conversation if needed
+  if (!currentId) startNewConversation();
+
+  const conv = getConv(currentId);
+
+  // Hide welcome
+  const welcome = document.getElementById('welcomeState');
+  if (welcome) welcome.remove();
+
+  // Append user message
+  appendUserBubble(text);
+  conv.messages.push({ role: 'user', content: text });
+
+  // Update title from first user message
+  if (!conv.title) { conv.title = text.slice(0, 36) + (text.length > 36 ? '…' : ''); }
+  saveConversations();
+  renderHistoryList();
+
+  inputEl.value = '';
+  inputEl.style.height = 'auto';
+
+  // Stream AI response
+  await streamAssistant(conv);
+}
+
+// ── Stream response ──
+async function streamAssistant(conv) {
+  isStreaming = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  // Thinking placeholder
+  const thinkRow = appendThinkingBubble();
+
+  let fullContent = '';
+  let bubbleContentEl = null;
+  let bubbleEl = null;
+
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: conv.messages })
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buf = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
+
+      const lines = buf.split('\n');
+      buf = lines.pop() || '';
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const raw = line.slice(6).trim();
+        if (raw === '[DONE]') continue;
+
+        let parsed;
+        try { parsed = JSON.parse(raw); } catch { continue; }
+
+        if (parsed.error) throw new Error(parsed.error);
+
+        const delta = parsed.choices?.[0]?.delta?.content;
+        if (!delta) continue;
+
+        // First chunk: replace thinking bubble with real bubble
+        if (!bubbleContentEl) {
+          thinkRow.remove();
+          const row = createAssistantBubble();
+          bubbleEl = row.querySelector('.msg-bubble');
+          bubbleContentEl = bubbleEl;
+          bubbleEl.classList.add('typing-cursor');
+        }
+
+        fullContent += delta;
+        bubbleContentEl.innerHTML = renderMarkdown(fullContent);
+        scrollBottom();
+      }
+    }
+
+    if (bubbleContentEl) bubbleEl.classList.remove('typing-cursor');
+
+  } catch (err) {
+    thinkRow.remove();
+    const row = createAssistantBubble();
+    const bbl = row.querySelector('.msg-bubble');
+    bbl.classList.add('msg-error');
+    bbl.textContent = '请求失败：' + err.message;
+    fullContent = '[错误] ' + err.message;
+  }
+
+  if (fullContent) {
+    conv.messages.push({ role: 'assistant', content: fullContent });
+    saveConversations();
+  }
+
+  isStreaming = false;
+  document.getElementById('sendBtn').disabled = false;
+  inputEl.focus();
+}
+
+// ── DOM helpers ──
+function appendUserBubble(text) {
+  const messages = document.getElementById('chatMessages');
+  const row = document.createElement('div');
+  row.className = 'msg-row user';
+  row.innerHTML = `
+    <div class="msg-avatar">我</div>
+    <div class="msg-bubble">${escapeHtml(text)}</div>
+  `;
+  messages.appendChild(row);
+  scrollBottom();
+}
+
+function appendThinkingBubble() {
+  const messages = document.getElementById('chatMessages');
+  const row = document.createElement('div');
+  row.className = 'msg-row assistant';
+  row.innerHTML = `
+    <div class="msg-avatar">🤖</div>
+    <div class="msg-bubble">
+      <div class="thinking-dots"><span></span><span></span><span></span></div>
+    </div>
+  `;
+  messages.appendChild(row);
+  scrollBottom();
+  return row;
+}
+
+function createAssistantBubble() {
+  const messages = document.getElementById('chatMessages');
+  const row = document.createElement('div');
+  row.className = 'msg-row assistant';
+  row.innerHTML = `<div class="msg-avatar">🤖</div><div class="msg-bubble"></div>`;
+  messages.appendChild(row);
+  scrollBottom();
+  return row;
+}
+
+function scrollBottom() {
+  const el = document.getElementById('chatMessages');
+  el.scrollTop = el.scrollHeight;
+}
+
+// ── Markdown renderer ──
+function renderMarkdown(text) {
+  // Escape HTML first (except inside code blocks which we handle specially)
+  let out = '';
+  const codeBlockReg = /```(\w*)\n?([\s\S]*?)```/g;
+  let lastIndex = 0;
+  let m;
+  while ((m = codeBlockReg.exec(text)) !== null) {
+    out += processInline(text.slice(lastIndex, m.index));
+    out += `<pre><code>${escapeHtml(m[2].trimEnd())}</code></pre>`;
+    lastIndex = codeBlockReg.lastIndex;
+  }
+  out += processInline(text.slice(lastIndex));
+  return out;
+}
+
+function processInline(text) {
+  // Headers
+  text = text.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
+  text = text.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  text = text.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  text = text.replace(/^# (.+)$/gm, '<h2>$1</h2>');
+  // Bold
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // Italic
+  text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  // Inline code
+  text = text.replace(/`([^`\n]+)`/g, (_, c) => `<code>${escapeHtml(c)}</code>`);
+  // Unordered list items
+  text = text.replace(/^[-*] (.+)$/gm, '<li>$1</li>');
+  // Ordered list items
+  text = text.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+  // Wrap consecutive li tags in <ul>
+  text = text.replace(/(<li>[\s\S]*?<\/li>)(\n<li>[\s\S]*?<\/li>)*/g, m => `<ul>${m}</ul>`);
+  // Paragraphs: double newline → paragraph break
+  text = text.replace(/\n\n+/g, '</p><p>');
+  // Single newline → <br>
+  text = text.replace(/\n/g, '<br>');
+  return `<p>${text}</p>`;
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Conversation management ──
+function startNewConversation() {
+  currentId = Date.now().toString();
+  conversations.unshift({ id: currentId, title: '', messages: [], time: formatTime(new Date()) });
+  saveConversations();
+}
+
+function newChat() {
+  currentId = null;
+  const messages = document.getElementById('chatMessages');
+  // Clear messages and restore welcome state
+  messages.innerHTML = `
+    <div class="welcome-state" id="welcomeState">
+      <div class="welcome-icon">🤖</div>
+      <div class="welcome-title">你好，我是 AI 小助理</div>
+      <div class="welcome-sub">
+        专注于国际学生阅读素养分析 · 基于 PISA 框架<br>
+        数据解读 · 政策分析 · 教学策略建议
+      </div>
+      <div class="recommend-grid" id="recommendGrid">
+        <div class="recommend-item" onclick="sendRecommend(this.dataset.q)" data-q="PISA阅读素养测评框架的核心维度是什么？">
+          <span class="ri-icon">📊</span>PISA阅读素养测评框架的核心维度是什么？
+        </div>
+        <div class="recommend-item" onclick="sendRecommend(this.dataset.q)" data-q="国际学生阅读能力的分级标准和评分机制是怎样的？">
+          <span class="ri-icon">📐</span>国际学生阅读能力的分级标准和评分机制是怎样的？
+        </div>
+        <div class="recommend-item" onclick="sendRecommend(this.dataset.q)" data-q="如何提升学生的信息提取与推断理解能力？">
+          <span class="ri-icon">🎯</span>如何提升学生的信息提取与推断理解能力？
+        </div>
+        <div class="recommend-item" onclick="sendRecommend(this.dataset.q)" data-q="请分析中国学生与OECD均值的阅读素养差异">
+          <span class="ri-icon">🌏</span>请分析中国学生与OECD均值的阅读素养差异
+        </div>
+        <div class="recommend-item" onclick="sendRecommend(this.dataset.q)" data-q="培养批判性阅读能力有哪些有效教学策略？">
+          <span class="ri-icon">💡</span>培养批判性阅读能力有哪些有效教学策略？
+        </div>
+        <div class="recommend-item" onclick="sendRecommend(this.dataset.q)" data-q="影响学生阅读素养的关键因素有哪些？请结合数据分析">
+          <span class="ri-icon">🔍</span>影响学生阅读素养的关键因素有哪些？请结合数据分析
+        </div>
+      </div>
+    </div>
+  `;
+  renderHistoryList();
+}
+
+function loadConversation(id) {
+  const conv = conversations.find(c => c.id === id);
+  if (!conv) return;
+  currentId = id;
+
+  const messages = document.getElementById('chatMessages');
+  messages.innerHTML = '';
+
+  for (const msg of conv.messages) {
+    if (msg.role === 'user') {
+      appendUserBubble(msg.content);
+    } else {
+      const row = createAssistantBubble();
+      row.querySelector('.msg-bubble').innerHTML = renderMarkdown(msg.content);
+    }
+  }
+  renderHistoryList();
+  scrollBottom();
+}
+
+function deleteConversation(id, e) {
+  e.stopPropagation();
+  conversations = conversations.filter(c => c.id !== id);
+  saveConversations();
+  if (currentId === id) newChat();
+  else renderHistoryList();
+}
+
+function getConv(id) { return conversations.find(c => c.id === id); }
+
+function saveConversations() {
+  // Keep at most 50 conversations
+  if (conversations.length > 50) conversations = conversations.slice(0, 50);
+  localStorage.setItem('ai_conversations', JSON.stringify(conversations));
+}
+
+function renderHistoryList() {
+  const list = document.getElementById('historyList');
+  if (conversations.length === 0) {
+    list.innerHTML = `
+      <div class="history-empty">
+        <span class="history-empty-icon">💬</span>
+        暂无历史记录<br>开始你的第一个对话吧
+      </div>`;
+    return;
+  }
+  list.innerHTML = conversations.map(c => `
+    <div class="history-item${c.id === currentId ? ' active' : ''}" onclick="loadConversation('${c.id}')">
+      <span class="history-item-icon">💬</span>
+      <div class="history-item-body">
+        <div class="history-item-title">${escapeHtml(c.title || '新对话')}</div>
+        <div class="history-item-time">${c.time || ''}</div>
+      </div>
+      <span class="history-item-del" onclick="deleteConversation('${c.id}', event)" title="删除">✕</span>
+    </div>
+  `).join('');
+}
+
+function formatTime(d) {
+  const now = new Date();
+  const diff = now - d;
+  if (diff < 60000) return '刚刚';
+  if (diff < 3600000) return Math.floor(diff/60000) + ' 分钟前';
+  if (diff < 86400000) return Math.floor(diff/3600000) + ' 小时前';
+  return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+</script>
+
+</body>
+</html>

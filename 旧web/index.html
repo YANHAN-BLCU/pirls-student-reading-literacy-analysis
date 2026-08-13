@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<!-- 修改 lang 属性为 zh -->
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-lang-en="Data-Oriented Educational Decision-Making Multivariate Dynamic Insight System" data-lang-zh="数据导向的教育决策多元动态洞察系统">数据导向的教育决策多元动态洞察系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #19153a;
+            color: #00ffea;
+            box-shadow: 0 0 100px #00ffea;
+            position: relative; /* 添加相对定位 */
+        }
+
+        nav {
+            background-color: #00000000;
+            padding: 40px 0;
+            text-align: center;
+            position: relative; /* 添加相对定位 */
+            z-index: 2; /* 提高导航栏的层级 */
+        }
+
+        nav a {
+            color: #00ffea;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 18px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 5px rgba(0, 255, 234, 0.3);
+        }
+
+        nav a:hover {
+            color: #87CEFA;
+            background-color: rgba(0, 255, 234, 0.1);
+            border-color: #87CEFA;
+            box-shadow: 0 0 10px rgba(135, 206, 250, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .page {
+            display: none;
+            padding: 20px;
+            position: relative; /* 确保相对定位 */
+            z-index: 2; /* 确保在代码雨之上 */
+            box-sizing: border-box; /* 确保内边距不会影响宽度 */
+        }
+
+        #education-news-page {
+            display: block;
+            text-align: center; /* 让教育资讯页面内容居中 */
+        }
+
+        #education-news-page h2,
+        #education-news-page section h2 {
+            position: relative; /* 确保相对定位 */
+            z-index: 2; /* 确保在代码雨之上 */
+            color: #00ffea; /* 确保标题颜色正确 */
+            font-size: 24px; /* 设置合适的字体大小 */
+            margin: 20px 0; /* 设置合适的外边距 */
+        }
+
+        #education-news-page ul {
+            list-style-type: none; /* 移除列表项的默认样式 */
+            padding: 0;
+        }
+
+        #education-news-page li {
+            margin-bottom: 20px; /* 给列表项添加底部间距 */
+        }
+        
+        #home-page {
+            text-align: center; /* 让首页文字内容居中 */
+        }
+
+        #home-page #info-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        #left-info, #right-info {
+            width: 45%; /* 给左右信息区域分配适当宽度 */
+        }
+
+        /* 移动端样式 */
+        @media (max-width: 768px) {
+            #home-page #info-container {
+                display: block; /* 取消 flex 布局 */
+            }
+
+            #left-info, #right-info {
+                width: 100%; /* 宽度占满屏幕 */
+                margin-top: 20px;
+                text-align: center;
+            }
+        }
+
+        .news-button {
+            display: block;
+            margin: 20px auto;
+            padding: 20px 40px;
+            background: rgba(0, 255, 234, 0.1);
+            color: #00ffea;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 50px;
+            width: 350px;
+            font-size: 20px;
+            border: 2px solid #00ffea;
+            box-shadow: 0 0 10px #00ffea;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+        }
+
+        .news-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: skewX(-30deg);
+            transition: left 0.5s;
+        }
+
+        .news-button:hover {
+            background: rgba(0, 255, 234, 0.05);
+            color: #00ffea;
+            transform: scale(1.1);
+            box-shadow: 0 0 5px #00ffea, 0 0 20px #00ffea;
+        }
+
+        .news-button:hover::before {
+            left: 100%;
+        }
+
+
+        .header-section {
+            background-color: #00000000;
+            padding: 20px;
+            text-align: center;
+            position: relative; /* 添加相对定位 */
+            z-index: 2; /* 提高标题和名言部分的层级 */
+        }
+
+        h1 {
+            font-size: 50px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1; /* 确保标题显示在代码雨之上 */
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 5px 5px 100px #00ffea;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            font-style: italic;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            color: #87CEFA;
+            text-shadow: 0 0 10px rgba(135, 206, 250, 0.5);
+            letter-spacing: 1px;
+        }
+
+        .quote {
+            font-size: 18px;
+            font-style: italic;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 添加代码雨画布样式 */
+        #matrix {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* 确保代码雨在底层 */
+        }
+
+
+        #home-echarts-container {
+        position: relative;
+        z-index: 1;
+        width: 1000%;
+        height: 500px;
+        margin: 0 auto;
+        left: 305px; /* 向右偏移 20px */
+        top: -20px; /* 向下偏移 20px */
+        }
+
+        /* 修改 #date-footer 的 z-index */
+        #date-footer {
+        text-align: center;
+        margin-top: 20px;
+        padding: 10px;
+        position: relative;
+        z-index: 1; /* 确保在代码雨之上 */
+        }
+
+        #language-toggle {
+        position: fixed;
+        top: 20px;
+        left: 20px; /* 修改为左上角定位 */
+        z-index: 3; /* 确保按钮在代码雨和其他元素之上 */
+        font-family: 'Orbitron', sans-serif;
+        background: rgba(0, 255, 234, 0.1);
+        color: #00ffea;
+        border: 2px solid #00ffea;
+        border-radius: 50px;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        }
+
+        #language-toggle:hover {
+            background: rgba(0, 255, 234, 0.05);
+            color: #00ffea;
+            transform: scale(1.1);
+            box-shadow: 0 0 5px #00ffea, 0 0 20px #00ffea;
+        }
+
+        /* 合并 dashboard-iframe.html 的样式 */
+        .dashboard-link {
+            display: block;
+            margin: 20px auto;
+            padding: 20px 40px;
+            background: rgba(0, 255, 234, 0.1);
+            color: #00ffea;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 50px;
+            width: 350px;
+            font-size: 20px;
+            border: 2px solid #00ffea;
+            box-shadow: 0 0 10px #00ffea;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1; /* 确保按钮显示在代码雨之上 */
+            overflow: hidden;
+        }
+
+        .dashboard-link:hover {
+            /* 降低背景颜色的透明度 */
+            background: rgba(0, 255, 234, 0.05); 
+            color: #00ffea;
+            transform: scale(1.1);
+            /* 减少发光效果的强度 */
+            box-shadow: 0 0 5px #00ffea, 0 0 20px #00ffea; 
+        }
+
+        .dashboard-link::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: skewX(-30deg);
+            transition: left 0.5s;
+        }
+
+        .dashboard-link:hover::before {
+            left: 100%;
+        }
+
+        #left-info p, #right-info p {
+            color: rgba(0, 255, 234, 0.3); /* 不明显的颜色 */
+            transition: all 0.3s ease; /* 让所有属性变化都有过渡效果 */
+            margin-bottom: 10px; /* 为每个信息项添加底部间距 */
+            padding: 5px 10px; /* 添加内边距 */
+            border-radius: 5px; /* 添加圆角 */
+            border: 2px solid transparent; /* 初始透明边框 */
+            text-shadow: none; /* 初始无文字阴影 */
+        }
+
+        #left-info p:hover, #right-info p:hover {
+            color: #00ffea; /* 高亮颜色 */
+            background-color: rgba(0, 255, 234, 0.1); /* 添加背景颜色 */
+            border-color: #00ffea; /* 添加边框颜色 */
+            transform: scale(1.05); /* 鼠标悬停时稍微放大 */
+            text-shadow: 0 0 10px #00ffea; /* 添加文字阴影 */
+            box-shadow: 0 0 10px rgba(0, 255, 234, 0.5); /* 添加盒子阴影 */
+        }
+
+        #echarts-page {
+            text-align: center;
+        }
+
+        #echarts-page a.dashboard-link {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #echarts-page img {
+        max-width: 80%;
+        height: auto;
+        display: block;
+        margin: 60px auto; /* 让图片在页面中居中显示，并添加上下外边距 */
+    }
+
+    /* 移动端样式 */
+    @media (max-width: 768px) {
+        nav a {
+            display: block;
+            margin: 10px auto;
+            font-size: 16px;
+            padding: 8px 16px;
+        }
+
+        .news-button, .dashboard-link {
+            width: 80%;
+            font-size: 16px;
+            padding: 15px 30px;
+        }
+
+        h1 {
+            font-size: 30px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        #home-echarts-container {
+            width: 100%;
+            left: 0;
+            top: 0;
+            height: 300px;
+            margin: 20px 0; /* 添加上下边距 */
+        }
+
+        #left-info, #right-info {
+            position: static; /* 取消固定定位 */
+            text-align: center;
+            margin-top: 20px;
+            width: 100%; /* 宽度占满屏幕 */
+        }
+
+        #echarts-page img {
+            max-width: 100%;
+            margin: 30px auto;
+        }
+
+        #language-toggle {
+            font-size: 14px;
+            padding: 8px 16px;
+            top: 10px;
+            left: 10px;
+        }
+
+        /* 爬虫组件响应式 */
+        .crawler-container {
+            width: 95%;
+            margin: 20px auto;
+            padding: 15px;
+        }
+
+        .crawler-header {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .crawler-stats {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .crawler-controls {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .crawler-news-list {
+            max-height: 400px;
+        }
+    }
+
+    /* ========== 爬虫组件样式 ========== */
+    .crawler-container {
+        background: rgba(0, 20, 40, 0.8);
+        border: 2px solid #00ffea;
+        border-radius: 15px;
+        padding: 20px;
+        margin: 20px auto;
+        width: 90%;
+        max-width: 900px;
+        box-shadow: 0 0 20px rgba(0, 255, 234, 0.3);
+        position: relative;
+        z-index: 2;
+    }
+
+    .crawler-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .crawler-title {
+        font-size: 20px;
+        color: #00ffea;
+        margin: 0;
+        text-shadow: 0 0 10px rgba(0, 255, 234, 0.5);
+    }
+
+    .crawler-stats {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .crawler-stat {
+        text-align: center;
+    }
+
+    .crawler-stat-value {
+        font-size: 24px;
+        font-weight: bold;
+        color: #00ffea;
+    }
+
+    .crawler-stat-label {
+        font-size: 11px;
+        color: #87CEFA;
+    }
+
+    .crawler-status {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .crawler-status.running {
+        background: #28a745;
+        color: white;
+        animation: crawlerPulse 1s infinite;
+    }
+
+    .crawler-status.stopped {
+        background: #dc3545;
+        color: white;
+    }
+
+    .crawler-status.offline {
+        background: #6c757d;
+        color: white;
+    }
+
+    @keyframes crawlerPulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.6; }
+        100% { opacity: 1; }
+    }
+
+    .crawler-controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .crawler-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        font-family: 'Orbitron', sans-serif;
+        transition: all 0.3s ease;
+    }
+
+    .crawler-btn:hover:not(:disabled) {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(0, 255, 234, 0.5);
+    }
+
+    .crawler-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .crawler-btn-start {
+        background: rgba(40, 167, 69, 0.8);
+        color: white;
+        border: 2px solid #28a745;
+    }
+
+    .crawler-btn-stop {
+        background: rgba(220, 53, 69, 0.8);
+        color: white;
+        border: 2px solid #dc3545;
+    }
+
+    .crawler-btn-clear {
+        background: rgba(255, 193, 7, 0.8);
+        color: #333;
+        border: 2px solid #ffc107;
+    }
+
+    .crawler-btn-launch {
+        background: rgba(0, 191, 255, 0.8);
+        color: white;
+        border: 2px solid #00bfff;
+    }
+
+    .crawler-btn-launch:hover {
+        background: rgba(0, 191, 255, 1);
+        box-shadow: 0 0 20px rgba(0, 191, 255, 0.7);
+    }
+
+    .crawler-news-list {
+        max-height: 500px;
+        overflow-y: auto;
+        border: 1px solid rgba(0, 255, 234, 0.3);
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.3);
+    }
+
+    .crawler-news-item {
+        padding: 15px;
+        border-bottom: 1px solid rgba(0, 255, 234, 0.1);
+        animation: fadeInUp 0.3s ease;
+    }
+
+    .crawler-news-item:last-child {
+        border-bottom: none;
+    }
+
+    .crawler-news-item:hover {
+        background: rgba(0, 255, 234, 0.05);
+    }
+
+    .crawler-news-item.new-item {
+        animation: highlight 0.5s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes highlight {
+        0% { background: rgba(0, 255, 234, 0.2); }
+        100% { background: transparent; }
+    }
+
+    .crawler-news-source {
+        display: inline-block;
+        padding: 2px 8px;
+        background: #00ffea;
+        color: #19153a;
+        border-radius: 3px;
+        font-size: 11px;
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    .crawler-news-title {
+        font-size: 15px;
+        color: #fff;
+        text-decoration: none;
+        line-height: 1.4;
+        display: block;
+        transition: color 0.3s ease;
+    }
+
+    .crawler-news-title:hover {
+        color: #00ffea;
+        text-decoration: underline;
+    }
+
+    .crawler-news-time {
+        font-size: 11px;
+        color: #87CEFA;
+        margin-top: 5px;
+    }
+
+    .crawler-empty {
+        text-align: center;
+        padding: 40px;
+        color: #87CEFA;
+    }
+
+    .crawler-loading {
+        text-align: center;
+        padding: 40px;
+        color: #87CEFA;
+    }
+
+    .crawler-offline {
+        text-align: center;
+        padding: 40px;
+        color: #dc3545;
+    }
+
+    .crawler-toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 24px;
+        border-radius: 8px;
+        color: white;
+        z-index: 9999;
+        font-size: 14px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        animation: toastIn 0.3s ease;
+    }
+
+    @keyframes toastIn {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+
+    .crawler-info-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        margin-top: 10px;
+        font-size: 12px;
+        color: #87CEFA;
+    }
+
+    .crawler-refresh-status {
+        font-size: 12px;
+    }
+
+    .crawler-refresh-status.running {
+        color: #28a745;
+    }
+
+    .crawler-refresh-status.stopped {
+        color: #dc3545;
+    }
+
+    .crawler-news-list::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .crawler-news-list::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+    }
+
+    .crawler-news-list::-webkit-scrollbar-thumb {
+        background: #00ffea;
+        border-radius: 4px;
+    }
+
+    .crawler-news-list::-webkit-scrollbar-thumb:hover {
+        background: #87CEFA;
+    }
+
+    </style>
+    <!-- 引入本地 ECharts 库 -->
+    <script src="lib/echarts.min.js"></script>
+    <script src="lib/world.js"></script>
+</head>
+
+<body>
+    <!-- 修改按钮，添加点击事件 -->
+    <button id="language-toggle" onclick="toggleLanguage()">中文</button>
+    <canvas id="matrix"></canvas>
+    <div class="header-section">
+        <!-- 使用 data-lang 属性存储中英文内容 -->
+        <h1 data-lang-en="Data-Oriented Educational Decision-Making Multivariate Dynamic Insight System" data-lang-zh="数据导向的教育决策多元动态洞察系统">数据导向的教育决策多元动态洞察系统</h1>
+        <p class="subtitle">北京语言大学校级重大基础专项《阅读素养视域下的全球阅读教育政策资源体系的建构及整合研究》（课题编号23ZDJ01）</p>
+        <p class="quote" id="quote-text" data-lang-en='"Education is not the filling of a pail, but the lighting of a fire. — Yeats"' data-lang-zh="“教育不是灌满一桶水，而是点燃一把火。 —— 叶芝”">“教育不是灌满一桶水，而是点燃一把火。 —— 叶芝”</p>
+    </div>
+    <nav>
+        <!-- 使用 data-lang 属性存储中英文内容 -->
+        <a href="#" onclick="console.log('点击了首页'); showPage('home-page')" data-lang-en="Home" data-lang-zh="首页">首页</a>
+        <a href="#" onclick="console.log('点击了教育资讯'); showPage('education-news-page')" data-lang-en="Education News" data-lang-zh="教育资讯">教育资讯</a>
+        <a href="#" onclick="console.log('点击了仪表板访问页面'); showPage('dashboard-page')" data-lang-en="Data Examples" data-lang-zh="数据实例">数据实例</a>
+        <a href="#" onclick="console.log('点击了ECharts 接入页面'); showPage('echarts-page')" data-lang-en="Self-service Charts" data-lang-zh="自助图表">自助图表</a>
+    </nav>
+    <div id="education-news-page" class="page">
+        <!-- 爬虫组件 - 实时教育资讯 -->
+        <div class="crawler-container" id="crawler-container">
+            <div class="crawler-header">
+                <h2 class="crawler-title" data-lang-en="Real-time Education News Crawler" data-lang-zh="实时教育资讯爬虫">实时教育资讯爬虫</h2>
+                <div class="crawler-stats">
+                    <div class="crawler-stat">
+                        <div class="crawler-stat-value" id="crawler-count">0</div>
+                        <div class="crawler-stat-label" data-lang-en="Current Display" data-lang-zh="当前显示">当前显示</div>
+                    </div>
+                    <div class="crawler-stat">
+                        <span id="crawler-status-text" class="crawler-status offline" data-lang-en="Offline" data-lang-zh="服务离线">服务离线</span>
+                    </div>
+                </div>
+            </div>
+            <div class="crawler-controls">
+                <button class="crawler-btn crawler-btn-launch" id="crawler-launch-btn" onclick="crawlerLaunch()" style="display:none;">
+                    <span data-lang-en="Launch Service" data-lang-zh="启动服务">启动服务</span>
+                </button>
+                <button class="crawler-btn crawler-btn-start" id="crawler-start-btn" onclick="crawlerStart()" disabled>
+                    <span data-lang-en="Start Crawler" data-lang-zh="启动爬虫">启动爬虫</span>
+                </button>
+                <button class="crawler-btn crawler-btn-stop" id="crawler-stop-btn" onclick="crawlerStop()" disabled>
+                    <span data-lang-en="Stop Crawler" data-lang-zh="停止爬虫">停止爬虫</span>
+                </button>
+                <button class="crawler-btn crawler-btn-clear" id="crawler-clear-btn" onclick="crawlerClear()" disabled>
+                    <span data-lang-en="Clear Data" data-lang-zh="清空数据">清空数据</span>
+                </button>
+            </div>
+            <div class="crawler-news-list" id="crawler-news-list">
+                <div class="crawler-loading">⏳ <span data-lang-en="Checking crawler service status..." data-lang-zh="正在检测爬虫服务状态...">正在检测爬虫服务状态...</span></div>
+            </div>
+            <div class="crawler-info-bar">
+                <span>⚡ <span data-lang-en="Crawl frequency: 1 article/second" data-lang-zh="爬取频率：每秒1条">爬取频率：每秒1条</span></span>
+                <span id="crawler-refresh-status" class="crawler-refresh-status stopped">🔄 <span data-lang-en="Auto-refresh: Stopped" data-lang-zh="自动刷新：已停止">自动刷新：已停止</span></span>
+                <span>📊 <span data-lang-en="Display latest 10 articles" data-lang-zh="最多显示：10条最新数据">最多显示：10条最新数据</span></span>
+            </div>
+        </div>
+
+        <section>
+            <!-- 使用 data-lang 属性存储中英文内容 -->
+            <h2 data-lang-en="Domestic Education and Reading News" data-lang-zh="国内教育与阅读新闻">国内教育与阅读新闻</h2>
+            <ul>
+                <li>
+                    <a href="https://www.moe.gov.cn/" target="_blank" class="news-button" data-lang-en="Ministry of Education Official Website - Get domestic education policies, information, etc." data-lang-zh="教育部官方网站 - 获取国内教育政策、资讯等">教育部官方网站 - 获取国内教育政策、资讯等</a>
+                    <div class="news-container" id="moe-news"></div>
+                </li>
+                <li>
+                    <a href="https://book.douban.com/" target="_blank" class="news-button" data-lang-en="Douban Books - Recommendations and reviews of popular domestic books" data-lang-zh="豆瓣读书 - 国内热门书籍推荐、书评等">豆瓣读书 - 国内热门书籍推荐、书评等</a>
+                    <div class="news-container" id="douban-news"></div>
+                </li>
+                <li>
+                    <a href="https://www.thepaper.cn/" target="_blank" class="news-button" data-lang-en="The Paper - Abundant educational news coverage" data-lang-zh="澎湃新闻 - 有丰富的教育领域新闻报道">澎湃新闻 - 有丰富的教育领域新闻报道</a>
+                    <div class="news-container" id="thepaper-news"></div>
+                </li>
+                <li>
+                    <a href="http://www.cepa.com.cn/" target="_blank" class="news-button" data-lang-en="China Education Daily - A professional educational news media" data-lang-zh="中国教育报 - 专业的教育新闻媒体">中国教育报 - 专业的教育新闻媒体</a>
+                    <div class="news-container" id="jyb-news"></div>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <!-- 使用 data-lang 属性存储中英文内容 -->
+            <h2 data-lang-en="Foreign Education and Reading News" data-lang-zh="国外教育与阅读新闻">国外教育与阅读新闻</h2>
+            <ul>
+                <li>
+                    <a href="https://www.ed.gov/" target="_blank" class="news-button" data-lang-en="U.S. Department of Education Official Website - Learn about U.S. education policies and trends" data-lang-zh="美国教育部官网 - 了解美国教育政策和动态">美国教育部官网 - 了解美国教育政策和动态</a>
+                    <div class="news-container" id="edgov-news"></div>
+                </li>
+                <li>
+                    <a href="https://www.theguardian.com/education" target="_blank" class="news-button" data-lang-en="The Guardian Education Section - Provides UK and international education news" data-lang-zh="卫报教育板块 - 提供英国及国际教育新闻">卫报教育板块 - 提供英国及国际教育新闻</a>
+                    <div class="news-container" id="guardian-news"></div>
+                </li>
+                <li>
+                    <a href="https://www.goodreads.com/" target="_blank" class="news-button" data-lang-en="Goodreads - A world-renowned book recommendation and social platform" data-lang-zh="Goodreads - 全球知名的书籍推荐和社交平台">Goodreads - 全球知名的书籍推荐和社交平台</a>
+                    <div class="news-container" id="goodreads-news"></div>
+                </li>
+                <li>
+                    <a href="https://www.tes.com/" target="_blank" class="news-button" data-lang-en="TES - A UK website focusing on educational resources and news" data-lang-zh="TES - 专注于教育资源和新闻的英国网站">TES - 专注于教育资源和新闻的英国网站</a>
+                    <div class="news-container" id="tes-news"></div>
+                </li>
+            </ul>
+        </section>
+    </div>
+    <div id="dashboard-page" class="page">
+        <!-- 合并 dashboard-iframe.html 的内容 -->
+        <div id="book-background"></div>
+        <canvas id="matrix"></canvas>
+        <!-- 新增小标题 -->
+        <h2 style="text-align: center; position: relative; z-index: 1; color: #00ffea;" data-lang-en="Existing Charts For Easy Analysis" data-lang-zh="便于分析的现有图表">便于分析的现有图表</h2>
+        <a class="dashboard-link" href="http://47.93.159.154:37799/webroot/decision/link/tglu" target="_blank" data-lang-en="Student Background Data" data-lang-zh="学生背景数据相关">学生背景数据相关</a>
+        <a class="dashboard-link" href="http://47.93.159.154:37799/webroot/decision/link/ooKT" target="_blank" data-lang-en="Teacher Background Data (1)" data-lang-zh="教师背景数据相关（1）">教师背景数据相关（1）</a>
+        <a class="dashboard-link" href="http://47.93.159.154:37799/webroot/decision/link/XLyo" target="_blank" data-lang-en="Teacher Background Data (2)" data-lang-zh="教师背景数据相关（2）">教师背景数据相关（2）</a>
+        <a class="dashboard-link" href="http://47.93.159.154:37799/webroot/decision/link/Wi6M" target="_blank" data-lang-en="Family Background Data" data-lang-zh="家庭背景数据相关">家庭背景数据相关</a>
+        <a class="dashboard-link" href="http://47.93.159.154:37799/webroot/decision/link/0H8Z" target="_blank" data-lang-en="School Background Data" data-lang-zh="学校背景数据相关">学校背景数据相关</a>
+        <a class="dashboard-link" href="http://47.93.159.154:37799/webroot/decision/link/AzHT" target="_blank" data-lang-en="Student Reading Literacy (a5)" data-lang-zh="学生阅读素养相关（a5）">学生阅读素养相关（a5）</a>
+        <a class="dashboard-link" href="http://47.93.159.154:37799/webroot/decision/link/gjzg" target="_blank" data-lang-en="Student Reading Literacy" data-lang-zh="学生阅读素养相关">学生阅读素养相关</a>
+    </div>
+    <div id="echarts-page" class="page">
+        <!-- 添加 data-lang 属性 -->
+        <h1 data-lang-en="Self-service Charts" data-lang-zh="自助图表">自助图表</h1>
+        <p data-lang-en="Support free selection of indicators for personalized analysis" data-lang-zh="支持自由选择指标进行个性化分析">支持自由选择指标进行个性化分析</p>
+        <!-- 将 iframe 替换为按钮 -->
+        <a href="http://47.93.159.154:8501/" target="_blank" class="dashboard-link" data-lang-en="Go to Self-service Charts" data-lang-zh="前往自助图表">前往自助图表</a>
+        <!-- 插入 chart 图片 -->
+        <img src="lib/chart.png" alt="自助图表">
+    </div>
+    <!-- 新增首页模块 -->
+    <div id="home-page" class="page">
+        <!-- 添加 data-lang 属性 -->
+        <p data-lang-en="Countries and regions involved: 64" data-lang-zh="已参与的国家和地区：64">已参与的国家和地区：64</p>
+        <!-- 添加容器包裹左右信息区域 -->
+        <div id="info-container">
+            <div id="left-info"></div>
+            <div id="right-info"></div>
+        </div>
+        <div id="home-echarts-container"></div>
+    </div>
+
+    <!-- 将点击量显示移到页面底部 -->
+    <div id="date-footer" style="text-align: center; margin-top: 20px; padding: 10px;">
+        <!-- 使用 data-lang 属性存储中英文内容 -->
+        <p data-lang-en="@BLCU-CIS" data-lang-zh="@北京语言大学信息科学学院">@北京语言大学信息科学学院<span id="@BLCU-CIS"></span></p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        // 优化画布大小设置，考虑窗口比例
+        function setCanvasSize() {
+            const aspectRatio = 16 / 9; // 假设使用 16:9 的比例
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            let canvasWidth, canvasHeight;
+
+            if (windowWidth / windowHeight > aspectRatio) {
+                canvasHeight = windowHeight;
+                canvasWidth = canvasHeight * aspectRatio;
+            } else {
+                canvasWidth = windowWidth;
+                canvasHeight = canvasWidth / aspectRatio;
+            }
+
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+        }
+
+        // 初始设置画布大小
+        setCanvasSize();
+
+        // 监听窗口大小变化事件
+        window.addEventListener('resize', setCanvasSize);
+
+        // 定义国家名列表
+        const countries = [
+            "中国", "阿尔巴尼亚", "澳大利亚", "奥地利", "阿塞拜疆", "巴林", "比利时",
+            "巴西", "保加利亚", "克罗地亚", "塞浦路斯", "捷克共和国", "丹麦", "埃及",
+            "英格兰", "芬兰", "法国", "格鲁吉亚", "德国", "中国香港特别行政区", "匈牙利", "伊朗伊斯兰共和国",
+            "爱尔兰", "以色列", "意大利", "约旦", "哈萨克斯坦", "科索沃", "拉脱维亚", "立陶宛",
+            "马耳他", "黑山", "摩洛哥", "荷兰", "新西兰", "北马其顿",
+            "北爱尔兰", "挪威", "阿曼", "波兰", "葡萄牙", "卡塔尔", "俄罗斯联邦", "沙特阿拉伯",
+            "塞尔维亚", "新加坡", "斯洛伐克共和国", "斯洛文尼亚", "南非", "西班牙", "瑞典", "土耳其",
+            "阿拉伯联合酋长国", "美国", "乌兹别克斯坦"
+        ];
+
+        // 定义英文国家名列表
+        const englishCountries = [
+            "China", "Albania", "Australia", "Austria", "Azerbaijan", "Bahrain", "Belgium",
+            "Brazil", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Egypt",
+            "England", "Finland", "France", "Georgia", "Germany", "Hong Kong, China", "Hungary", "Iran, Islamic Republic of",
+            "Ireland", "Israel", "Italy", "Jordan", "Kazakhstan", "Kosovo", "Latvia", "Lithuania",
+            "Malta", "Montenegro", "Morocco", "Netherlands", "New Zealand", "North Macedonia",
+            "Northern Ireland", "Norway", "Oman", "Poland", "Portugal", "Qatar", "Russian Federation", "Saudi Arabia",
+            "Serbia", "Singapore", "Slovak Republic", "Slovenia", "South Africa", "Spain", "Sweden", "Turkey",
+            "United Arab Emirates", "United States", "Uzbekistan"
+        ];
+
+        // 调整字体大小
+        const fontSize = 15;
+        // 进一步增大列间距，降低字符密度
+        const columnSpacing = 8; 
+        const columns = Math.floor(canvas.width / (fontSize * columnSpacing));
+
+        // 存储每个列下一个国家名开始下落的行号
+        const drops = [];
+        // 控制每个列国家名重新开始下落的频率
+        const restartThreshold = 0.95;
+
+        for (let x = 0; x < columns; x++) {
+            // 初始时让第一个国家名在随机行开始下落
+            drops[x] = Math.floor(Math.random() * 20);
+        }
+
+        // 修改 draw 函数
+        function draw() {
+            // 增加画布清除时的透明度，将最后一个参数调小
+            ctx.fillStyle = 'rgba(1, 1, 0, 0.07)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // 增加文字颜色的透明度
+            ctx.fillStyle = 'rgba(135, 206, 250, 0.5)'; 
+            ctx.font = fontSize + 'px monospace';
+
+            // 根据当前语言选择国家名列表
+            const isEnglish = document.documentElement.lang === 'en';
+            const countryList = isEnglish ? englishCountries : countries;
+
+            for (let i = 0; i < drops.length; i++) {
+                const country = countryList[Math.floor(Math.random() * countryList.length)];
+                if (drops[i] * fontSize < canvas.height) {
+                    ctx.fillText(country, i * fontSize * columnSpacing, drops[i] * fontSize);
+                }
+
+                // 调整下落速度
+                drops[i] += Math.max(1, Math.floor(country.length / 3));
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > restartThreshold) {
+                    // 让下一个国家名在随机的较靠上的位置开始下落
+                    drops[i] = Math.floor(Math.random() * 10);
+                }
+            }
+        }
+
+        setInterval(draw, 33);
+
+        // 定义中英文名言数组
+        const chineseQuotes = [
+            "“教育不是灌满一桶水，而是点燃一把火。 —— 叶芝”",
+            "“读书破万卷，下笔如有神。 —— 杜甫”",
+            "“知识是珍宝，但实践是得到它的钥匙。 —— 托马斯·富勒”",
+            "“教育的根是苦的，但其果实是甜的。 —— 亚里士多德”"
+        ];
+
+        const englishQuotes = [
+            "\"Education is not the filling of a pail, but the lighting of a fire. — Yeats\"",
+            "\"Having read ten thousand volumes, I write with godlike ease. — Du Fu\"",
+            "\"Knowledge is a treasure, but practice is the key to it. — Thomas Fuller\"",
+            "\"The roots of education are bitter, but the fruit is sweet. — Aristotle\""
+        ];
+
+        let currentQuoteIndex = 0;
+        const quoteText = document.getElementById('quote-text');
+
+        // 检查元素是否成功获取
+        if (!quoteText) {
+            console.error('未找到名言元素，请检查元素 ID 是否正确。');
+        } else {
+            document.addEventListener('click', function () {
+                console.log('点击事件触发，尝试切换名言');
+                currentQuoteIndex = (currentQuoteIndex + 1) % chineseQuotes.length;
+                const isEnglish = document.documentElement.lang === 'en';
+                const quotesToUse = isEnglish ? englishQuotes : chineseQuotes;
+                quoteText.textContent = quotesToUse[currentQuoteIndex];
+            });
+        }
+
+        function showPage(pageId) {
+            console.log('尝试显示页面: ', pageId);
+            const pages = document.querySelectorAll('.page');
+            if (pages.length === 0) {
+                console.error('未找到任何页面元素，请检查 .page 类是否正确应用。');
+                return;
+            }
+            pages.forEach(page => {
+                page.style.display = 'none';
+            });
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.style.display = 'block';
+            } else {
+                console.error('未找到指定页面元素: ', pageId);
+            }
+        }
+
+       
+    // 页面加载完成后默认显示首页
+    window.addEventListener('load', function () {
+        // 原有的地图绘制逻辑
+        const container = document.getElementById('home-echarts-container');
+        if (!container) {
+            console.error('未找到地图容器元素，请检查 HTML 代码');
+        } else {
+            const myChart = echarts.init(container);
+            if (!myChart) {
+                console.error('ECharts 实例初始化失败，请检查 ECharts 库是否正确加载');
+            } else {
+                if (!echarts.getMap('world')) {
+                    console.error('世界地图数据未正确加载，请检查网络请求');
+                } else {
+                    const option = {
+                        tooltip: {
+                            trigger: 'item'
+                        },
+                        visualMap: {
+                        type: 'piecewise', 
+                        pieces: [
+                            { value: 1, color: '#37e2dc' }, // 随机颜色
+                            { min: 2, color: '#323c48' } // 其他值显示为默认颜色
+                        ],
+                        left: 'left',
+                        top: 'bottom',
+                        text: ['未参与', '参与'],
+                        calculable: true
+                    },
+                        geo: {
+                            map: 'world',
+                            roam: true,
+                            itemStyle: {
+                                normal: {
+                                    areaColor: '#323c48',
+                                    borderColor: '#111'
+                                },
+                                emphasis: {
+                                    areaColor: '#2a333d'
+                                }
+                            },
+                            // 添加 zoom 属性，值越大地图越大，这里设置为 1.5 作为示例
+                            zoom: 1.1 
+                        },
+                        series: [
+                            {
+                                name: '世界地图',
+                                type: 'map',
+                                map: 'world',
+                                geoIndex: 0,
+                                data: [
+                                {name : 'China', value : 1},
+                                {name : 'Albania', value : 1},
+                                {name : 'Australia', value : 1},
+                                {name : 'Austria', value : 1},
+                                {name : 'Azerbaijan', value : 1},
+                                {name : 'Bahrain', value : 1},
+                                {name : 'Belgium', value : 1},
+                                {name : 'Brazil', value : 1},
+                                {name : 'Bulgaria', value : 1},
+                                {name : 'Croatia', value : 1},
+                                {name : 'Cyprus', value : 1},
+                                {name : 'Czech Republic', value : 1},
+                                {name : 'Denmark', value : 1},
+                                {name : 'Egypt', value : 1},
+                                {name : 'England', value : 1},
+                                {name : 'Finland', value : 1},
+                                {name : 'France', value : 1},
+                                {name : 'Georgia', value : 1},
+                                {name : 'Germany', value : 1},
+                                {name : 'Hong Kong', value : 1},  /* 原文件无，使用简化英文名称 */
+                                {name : 'Hungary', value : 1},
+                                {name : 'Iran', value : 1},        /* 原文件中为"Iran"，非全称 */
+                                {name : 'Ireland', value : 1},
+                                {name : 'Israel', value : 1},
+                                {name : 'Italy', value : 1},
+                                {name : 'Jordan', value : 1},
+                                {name : 'Kazakhstan', value : 1},
+                                {name : 'Kosovo', value : 1},
+                                {name : 'Latvia', value : 1},
+                                {name : 'Lithuania', value : 1},
+                                {name : 'Malta', value : 1},       /* 原文件无，使用标准英文名称 */
+                                {name : 'Montenegro', value : 1},
+                                {name : 'Morocco', value : 1},
+                                {name : 'Netherlands', value : 1},
+                                {name : 'New Zealand', value : 1},
+                                {name : 'Macedonia', value : 1},   /* 原文件中为"Macedonia"，对应“北马其顿” */
+                                {name : 'Northern Ireland', value : 1},  /* 原文件无，使用完整英文名称 */
+                                {name : 'Norway', value : 1},
+                                {name : 'Oman', value : 1},
+                                {name : 'Poland', value : 1},
+                                {name : 'Portugal', value : 1},
+                                {name : 'Qatar', value : 1},
+                                {name : 'Russia', value : 1},      /* 原文件中为"Russia"，非全称 */
+                                {name : 'Saudi Arabia', value : 1},
+                                {name : 'Republic of Serbia', value : 1},  /* 原文件中全称，非"Serbia" */
+                                {name : 'Singapore', value : 1},   /* 原文件无，使用标准英文名称 */
+                                {name : 'Slovakia', value : 1},    /* 原文件中为"Slovakia"，非全称 */
+                                {name : 'Slovenia', value : 1},
+                                {name : 'South Africa', value : 1},
+                                {name : 'Spain', value : 1},
+                                {name : 'Sweden', value : 1},
+                                {name : 'Turkey', value : 1},
+                                {name : 'United Arab Emirates', value : 1},
+                                {name : 'United States', value : 1},
+                                {name : 'Uzbekistan', value : 1},
+                                {name : 'Canada', value : 1}
+                            ]
+                        }
+                    ]
+                    };
+
+                    try {
+                        myChart.setOption(option);
+                        console.log('世界地图已成功渲染');
+                    } catch (error) {
+                        console.error('设置 ECharts 选项时出错:', error);
+                    }
+
+                    // 合并窗口大小监听代码
+                    if (myChart) {
+                        window.addEventListener('resize', function () {
+                            myChart.resize();
+                        });
+                    }
+
+                    // 新增：默认显示首页
+                    showPage('home-page');
+                }
+            }
+            window.addEventListener('resize', function () {
+                myChart.resize();
+            });
+        }
+
+        // 新增：默认显示首页
+        showPage('home-page');
+    });
+
+    function showPage(pageId) {
+        console.log('尝试显示页面: ', pageId);
+        const pages = document.querySelectorAll('.page');
+        if (pages.length === 0) {
+            console.error('未找到任何页面元素，请检查 .page 类是否正确应用。');
+            return;
+        }
+        pages.forEach(page => {
+            page.style.display = 'none';
+        });
+        const selectedPage = document.getElementById(pageId);
+        if (selectedPage) {
+            selectedPage.style.display = 'block';
+        } else {
+            console.error('未找到指定页面元素: ', pageId);
+        }
+    }
+
+    const infoArray = [
+        {
+            'zh': "学校归属感最高的国家：阿尔巴尼亚",
+            'en': "Country with the highest school belonging: Albania"
+        },
+        {
+            'zh': "完成正式教育水平最高的国家：斯洛伐克",
+            'en': "Country with the highest level of formal education completion: Slovakia"
+        },
+        {
+            'zh': "家庭平均藏书量最多的国家：格鲁吉亚",
+            'en': "Country with the highest average number of books per household: Georgia"
+        },
+        {
+            'zh': "基本读写能力最强的国家：新加坡",
+            'en': "Country with the strongest basic literacy skills: Singapore"
+        },
+        {
+            'zh': "综合阅读能力最强的国家：俄罗斯",
+            'en': "Country with the strongest comprehensive reading ability: Russia"
+        },
+        {
+            'zh': "已达成的平均阅读量级基准最高的国家：俄罗斯",
+            'en': "Country with the highest average reading benchmark achieved: Russia"
+        },
+        {
+            'zh': "学生欺凌现象最少的国家：南非",
+            'en': "Country with the least student bullying: South Africa"
+        },
+        {
+            'zh': "学生数字自我效能感最高的国家：波兰",
+            'en': "Country with the highest student digital self-efficacy: Poland"
+        },
+        {
+            'zh': "图书馆资源最多的地区：中国澳门特别行政区",
+            'en': "Region with the most library resources: Macau Special Administrative Region of China"
+        },
+        {
+            'zh': "学校图书馆借书频率最高的国家：意大利",
+            'en': "Country with the highest frequency of borrowing from school libraries: Italy"
+        },
+        {
+            'zh': "学生阅读自我效能感最高的地区：中国台北",
+            'en': "Region with the highest student reading self-efficacy: Taipei, China"
+        },
+        {
+            'zh': "每周教学天数最多的国家：法国",
+            'en': "Country with the most teaching days per week: France"
+        }
+    ];
+
+    const leftInfoDiv = document.getElementById('left-info');
+    const rightInfoDiv = document.getElementById('right-info');
+
+    function updateInfo() {
+        let leftContent = '';
+        let rightContent = '';
+        const halfLength = Math.ceil(infoArray.length / 2);
+        const isEnglish = document.documentElement.lang === 'en';
+
+        // 填充左侧信息
+        for (let i = 0; i < halfLength; i++) {
+            leftContent += `<p>${isEnglish ? infoArray[i].en : infoArray[i].zh}</p>`;
+        }
+
+        // 填充右侧信息
+        for (let i = halfLength; i < infoArray.length; i++) {
+            rightContent += `<p>${isEnglish ? infoArray[i].en : infoArray[i].zh}</p>`;
+        }
+
+        leftInfoDiv.innerHTML = leftContent;
+        rightInfoDiv.innerHTML = rightContent;
+    }
+
+    updateInfo();
+
+    function showPage(pageId) {
+        console.log('尝试显示页面: ', pageId);
+        const pages = document.querySelectorAll('.page');
+        if (pages.length === 0) {
+            console.error('未找到任何页面元素，请检查 .page 类是否正确应用。');
+            return;
+        }
+        pages.forEach(page => {
+            page.style.display = 'none';
+        });
+        const selectedPage = document.getElementById(pageId);
+        if (selectedPage) {
+            selectedPage.style.display = 'block';
+        } else {
+            console.error('未找到指定页面元素: ', pageId);
+        }
+    }
+
+    // 中英文切换函数
+    // 定义语言切换函数
+    function toggleLanguage() {
+        const htmlElement = document.documentElement;
+        const isEnglish = htmlElement.lang === 'en';
+        const newLang = isEnglish ? 'zh' : 'en';
+        console.log(`尝试将语言从 ${isEnglish ? '英语' : '中文'} 切换到 ${isEnglish ? '中文' : '英语'}`);
+        
+        htmlElement.lang = newLang;
+        const toggleButton = document.getElementById('language-toggle');
+        toggleButton.textContent = isEnglish ? '中文' : 'English';
+        
+        console.log(`语言已切换到 ${newLang === 'en' ? '英语' : '中文'}`);
+        updateLanguage();
+        updatePageTitle(); // 新增：更新页面标题
+    }
+
+     // 完善 updateLanguage 函数
+     function updateLanguage() {
+        const isEnglish = document.documentElement.lang === 'en';
+        console.log(`开始更新页面语言，当前语言为 ${isEnglish ? '英语' : '中文'}`);
+        
+        const elements = document.querySelectorAll('[data-lang-en][data-lang-zh]');
+        elements.forEach((element, index) => {
+            const originalText = element.textContent;
+            element.textContent = isEnglish ? element.dataset.langEn : element.dataset.langZh;
+            console.log(`已更新元素 ${index + 1} 的文本内容，从 "${originalText}" 切换到 "${element.textContent}"`);
+        });
+
+        // 更新侧边信息
+        updateInfo();
+        
+        console.log('页面语言更新完成');
+    }
+    
+    function updatePageTitle() {
+        const isEnglish = document.documentElement.lang === 'en';
+        const titleElement = document.querySelector('title');
+        if (titleElement) {
+            const originalTitle = titleElement.textContent;
+            titleElement.textContent = isEnglish ? titleElement.dataset.langEn : titleElement.dataset.langZh;
+            console.log(`页面标题已从 "${originalTitle}" 切换到 "${titleElement.textContent}"`);
+        }
+    }
+
+    // 页面加载时更新语言和标题
+    window.addEventListener('load', () => {
+        updateLanguage();
+        updatePageTitle();
+    });
+
+    // 监听父窗口的语言切换事件
+    window.addEventListener('message', function (event) {
+        // 验证消息来源，确保安全
+        if (event.origin === window.location.origin && event.data === 'language-changed') {
+            console.log('收到父窗口的语言切换事件，开始更新语言');
+            updateLanguage();
+            updatePageTitle();
+        }
+    });
+
+    // ========== 爬虫系统集成 ==========
+    // 爬虫服务地址（默认本地 Flask 服务）
+    const CRAWLER_API_BASE = 'http://127.0.0.1:5000';
+    let crawlerAutoRefreshInterval = null;
+    let crawlerIsActive = false;
+    let crawlerServiceOnline = false;
+    let crawlerLastCount = 0;
+
+    // 页面加载时初始化爬虫
+    window.addEventListener('load', function() {
+        checkCrawlerHealth();
+        // 每30秒检测一次服务状态
+        setInterval(checkCrawlerHealth, 30000);
+    });
+
+    // 检测爬虫服务是否在线
+    async function checkCrawlerHealth() {
+        try {
+            const response = await fetch(`${CRAWLER_API_BASE}/api/health`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (response.ok) {
+                crawlerServiceOnline = true;
+                updateCrawlerStatusUI();
+                loadCrawlerNews();
+                updateCrawlerStatus();
+            } else {
+                throw new Error('Service unavailable');
+            }
+        } catch (error) {
+            crawlerServiceOnline = false;
+            updateCrawlerStatusUI();
+            document.getElementById('crawler-news-list').innerHTML =
+                '<div class="crawler-offline">❌ <span data-lang-en="Crawler service is offline. Click \"Launch Service\" to start." data-lang-zh="爬虫服务离线，点击"启动服务"自动启动">爬虫服务离线，点击"启动服务"自动启动</span><br><br>' +
+                '<span style="font-size:12px;color:#87CEFA;" data-lang-en="Or manually run: cd \"教育资讯爬虫系统\" && python app.py" data-lang-zh="或手动运行：cd \"教育资讯爬虫系统\" && python app.py">或手动运行：cd "教育资讯爬虫系统" && python app.py</span></div>';
+        }
+    }
+
+    // 更新爬虫服务状态UI
+    function updateCrawlerStatusUI() {
+        const statusText = document.getElementById('crawler-status-text');
+        const launchBtn = document.getElementById('crawler-launch-btn');
+        const startBtn = document.getElementById('crawler-start-btn');
+        const stopBtn = document.getElementById('crawler-stop-btn');
+        const clearBtn = document.getElementById('crawler-clear-btn');
+
+        if (crawlerServiceOnline) {
+            launchBtn.style.display = 'none';
+            clearBtn.disabled = false;
+            if (crawlerIsActive) {
+                statusText.className = 'crawler-status running';
+                statusText.textContent = document.documentElement.lang === 'en' ? 'Running' : '运行中';
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+            } else {
+                statusText.className = 'crawler-status stopped';
+                statusText.textContent = document.documentElement.lang === 'en' ? 'Stopped' : '已停止';
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        } else {
+            statusText.className = 'crawler-status offline';
+            statusText.textContent = document.documentElement.lang === 'en' ? 'Offline' : '服务离线';
+            launchBtn.style.display = 'inline-block';
+            startBtn.disabled = true;
+            stopBtn.disabled = true;
+            clearBtn.disabled = true;
+        }
+    }
+
+    // 加载爬虫新闻
+    async function loadCrawlerNews() {
+        if (!crawlerServiceOnline) return;
+        try {
+            const response = await fetch(`${CRAWLER_API_BASE}/api/news`);
+            if (!response.ok) throw new Error('Network error');
+            const news = await response.json();
+            const newsList = document.getElementById('crawler-news-list');
+
+            if (!news || news.length === 0) {
+                newsList.innerHTML = '<div class="crawler-empty">📭 <span data-lang-en="No data yet. Click \"Start Crawler\" to begin." data-lang-zh="暂无数据，请点击"启动爬虫"开始采集">暂无数据，请点击"启动爬虫"开始采集</span></div>';
+                document.getElementById('crawler-count').textContent = '0';
+                return;
+            }
+
+            let html = '';
+            for (let i = 0; i < news.length; i++) {
+                const item = news[i];
+                const isNew = i === 0 && news.length > crawlerLastCount;
+                html += `
+                    <div class="crawler-news-item${isNew ? ' new-item' : ''}">
+                        <div>
+                            <span class="crawler-news-source">${escapeHtml(item.source)}</span>
+                            <a href="${escapeHtml(item.url)}" target="_blank" class="crawler-news-title">${escapeHtml(item.title)}</a>
+                        </div>
+                        <div class="crawler-news-time">⏰ ${escapeHtml(item.crawl_time)}</div>
+                    </div>
+                `;
+            }
+            newsList.innerHTML = html;
+            document.getElementById('crawler-count').textContent = news.length;
+            crawlerLastCount = news.length;
+        } catch (error) {
+            console.error('Crawler load error:', error);
+        }
+    }
+
+    // 更新爬虫状态
+    async function updateCrawlerStatus() {
+        if (!crawlerServiceOnline) return;
+        try {
+            const response = await fetch(`${CRAWLER_API_BASE}/api/status`);
+            const status = await response.json();
+            const wasActive = crawlerIsActive;
+            crawlerIsActive = status.active;
+
+            const startBtn = document.getElementById('crawler-start-btn');
+            const stopBtn = document.getElementById('crawler-stop-btn');
+            const refreshStatus = document.getElementById('crawler-refresh-status');
+
+            if (status.active) {
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                if (!wasActive && status.active) {
+                    startCrawlerRefresh();
+                }
+            } else {
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                if (wasActive && !status.active) {
+                    stopCrawlerRefresh();
+                }
+            }
+
+            updateCrawlerStatusUI();
+            document.getElementById('crawler-count').textContent = status.total_count;
+        } catch (error) {
+            console.error('Status check error:', error);
+        }
+    }
+
+    // 启动前端自动刷新
+    function startCrawlerRefresh() {
+        if (crawlerAutoRefreshInterval) clearInterval(crawlerAutoRefreshInterval);
+        crawlerAutoRefreshInterval = setInterval(function() {
+            loadCrawlerNews();
+            updateCrawlerStatus();
+        }, 1000);
+        const refreshStatus = document.getElementById('crawler-refresh-status');
+        refreshStatus.innerHTML = '🔄 <span data-lang-en="Auto-refresh: Running" data-lang-zh="自动刷新：运行中">自动刷新：运行中</span>';
+        refreshStatus.className = 'crawler-refresh-status running';
+    }
+
+    // 停止前端自动刷新
+    function stopCrawlerRefresh() {
+        if (crawlerAutoRefreshInterval) {
+            clearInterval(crawlerAutoRefreshInterval);
+            crawlerAutoRefreshInterval = null;
+        }
+        const refreshStatus = document.getElementById('crawler-refresh-status');
+        refreshStatus.innerHTML = '🔄 <span data-lang-en="Auto-refresh: Stopped" data-lang-zh="自动刷新：已停止">自动刷新：已停止</span>';
+        refreshStatus.className = 'crawler-refresh-status stopped';
+    }
+
+    // 启动Flask服务
+    function crawlerLaunch() {
+        const launchBtn = document.getElementById('crawler-launch-btn');
+        launchBtn.disabled = true;
+        launchBtn.innerHTML = '⏳ <span data-lang-en="Starting..." data-lang-zh="启动中...">启动中...</span>';
+
+        crawlerShowToast(
+            document.documentElement.lang === 'en'
+                ? 'Opening launcher folder...'
+                : '正在打开启动脚本目录...',
+            'info'
+        );
+
+        // 打开文件资源管理器到爬虫系统目录
+        try {
+            const crawlerFolder = 'F:\\\\DC24\\\\web\\\\教育资讯爬虫系统';
+            const vbsCode = `
+                Set objShell = CreateObject("Shell.Application")
+                objShell.Open("${crawlerFolder.replace(/\\/g, '\\\\')}")
+            `;
+            const blob = new Blob([vbsCode], { type: 'text/vbscript' });
+            const vbsUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = vbsUrl;
+            link.download = 'open_folder.vbs';
+            link.click();
+            URL.revokeObjectURL(vbsUrl);
+
+            setTimeout(() => {
+                alert(
+                    document.documentElement.lang === 'en'
+                        ? 'Please do the following:\n\n1. Find "启动爬虫服务.bat" in the opened folder\n2. Double-click it to start the Flask server\n3. The crawler will automatically connect once running!'
+                        : '请按以下步骤操作：\n\n1. 在打开的文件夹中找到"启动爬虫服务.bat"\n2. 双击运行它启动Flask服务器\n3. 启动后系统将自动连接！'
+                );
+            }, 500);
+
+        } catch (error) {
+            console.error('Launch error:', error);
+            crawlerShowToast(
+                document.documentElement.lang === 'en'
+                    ? 'Please manually open the crawler folder and run "启动爬虫服务.bat"'
+                    : '请手动打开爬虫系统文件夹，双击"启动爬虫服务.bat"',
+                'warning'
+            );
+        }
+
+        // 开始轮询检测服务是否上线
+        let pollCount = 0;
+        const pollInterval = setInterval(async () => {
+            pollCount++;
+            try {
+                const response = await fetch(`${CRAWLER_API_BASE}/api/health`);
+                if (response.ok) {
+                    clearInterval(pollInterval);
+                    crawlerServiceOnline = true;
+                    updateCrawlerStatusUI();
+                    crawlerShowToast(
+                        document.documentElement.lang === 'en' ? 'Service connected!' : '服务已连接！',
+                        'success'
+                    );
+                    loadCrawlerNews();
+                    updateCrawlerStatus();
+                }
+            } catch (e) {}
+            if (pollCount >= 60) {
+                clearInterval(pollInterval);
+                launchBtn.disabled = false;
+                launchBtn.innerHTML = '<span data-lang-en="Launch Service" data-lang-zh="启动服务">启动服务</span>';
+            }
+        }, 1000);
+    }
+
+    // 启动爬虫
+    async function crawlerStart() {
+        if (!crawlerServiceOnline) {
+            crawlerShowToast(document.documentElement.lang === 'en' ? 'Crawler service is offline!' : '爬虫服务离线！', 'error');
+            return;
+        }
+        try {
+            const response = await fetch(`${CRAWLER_API_BASE}/api/start`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const result = await response.json();
+            if (result.success) {
+                crawlerShowToast(result.message, 'success');
+                setTimeout(() => {
+                    loadCrawlerNews();
+                    updateCrawlerStatus();
+                }, 500);
+            } else {
+                crawlerShowToast(result.message, 'warning');
+            }
+        } catch (error) {
+            crawlerShowToast(document.documentElement.lang === 'en' ? 'Start failed!' : '启动失败！', 'error');
+        }
+    }
+
+    // 停止爬虫
+    async function crawlerStop() {
+        try {
+            const response = await fetch(`${CRAWLER_API_BASE}/api/stop`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const result = await response.json();
+            if (result.success) {
+                crawlerShowToast(result.message, 'info');
+                updateCrawlerStatus();
+            } else {
+                crawlerShowToast(result.message, 'warning');
+            }
+        } catch (error) {
+            crawlerShowToast(document.documentElement.lang === 'en' ? 'Stop failed!' : '停止失败！', 'error');
+        }
+    }
+
+    // 清空数据
+    async function crawlerClear() {
+        if (!confirm(document.documentElement.lang === 'en' ? 'Clear all data?' : '确定要清空所有数据吗？')) {
+            return;
+        }
+        try {
+            const response = await fetch(`${CRAWLER_API_BASE}/api/clear`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const result = await response.json();
+            if (result.success) {
+                crawlerShowToast(result.message, 'success');
+                loadCrawlerNews();
+                updateCrawlerStatus();
+            }
+        } catch (error) {
+            crawlerShowToast(document.documentElement.lang === 'en' ? 'Clear failed!' : '清空失败！', 'error');
+        }
+    }
+
+    // 显示提示
+    function crawlerShowToast(message, type) {
+        const toast = document.createElement('div');
+        toast.textContent = message;
+        toast.className = 'crawler-toast';
+        if (type === 'success') toast.style.background = '#28a745';
+        else if (type === 'error') toast.style.background = '#dc3545';
+        else if (type === 'warning') { toast.style.background = '#ffc107'; toast.style.color = '#333'; }
+        else toast.style.background = '#17a2b8';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    }
+
+    // XSS防护
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+</body>
+
+</html>

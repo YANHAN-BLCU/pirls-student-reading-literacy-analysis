@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自助数据挖掘 | 数据驱动的教育决策多维动态洞察系统</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft YaHei", sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* 导航 —— 与主站完全一致 */
+    .header {
+      width: 100%;
+      height: 72px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 7%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 999;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    .logo {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1e1b4b;
+      letter-spacing: 0.5px;
+    }
+    .logo span {
+      color: #7c3aed;
+    }
+    .nav {
+      display: flex;
+      gap: 42px;
+      align-items: center;
+    }
+    .nav-item {
+      font-size: 15px;
+      color: #374151;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.35s;
+      position: relative;
+      padding: 6px 0;
+      text-decoration: none;
+    }
+    .nav-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 3px;
+      background: #7c3aed;
+      transform: translateX(-50%);
+      border-radius: 3px;
+      transition: 0.35s;
+    }
+    .nav-item:hover {
+      color: #7c3aed;
+      transform: translateY(-1px);
+    }
+    .nav-item:hover::after {
+      width: 110%;
+    }
+    .nav-item.active {
+      color: #7c3aed;
+    }
+    .nav-item.active::after {
+      width: 110%;
+    }
+
+    /* 返回按钮 */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: #f3f4f6;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #374151;
+      text-decoration: none;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .back-btn:hover {
+      background: #e5e7eb;
+      color: #7c3aed;
+    }
+
+    /* 渐变条 */
+    .news-bar {
+      margin-top: 72px;
+      width: 100%;
+      height: 44px;
+      background: linear-gradient(90deg, #7c3aed, #a855f7, #ec4899);
+      box-shadow: 0 4px 20px rgba(124,58,237,0.1);
+    }
+
+    /* 页面容器 */
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 60px 7%;
+    }
+
+    /* 底部 */
+    .footer {
+      background: #111827;
+      padding: 50px 7%;
+      display: flex;
+      justify-content: center;
+      gap: 50px;
+    }
+    .footer a {
+      color: #9ca3af;
+      font-size: 14px;
+      text-decoration: none;
+      transition: 0.3s;
+      position: relative;
+    }
+    .footer a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: #fff;
+      transition: 0.3s;
+    }
+    .footer a:hover {
+      color: #fff;
+    }
+    .footer a:hover::after {
+      width: 100%;
+    }
+    .footer-line {
+      height: 8px;
+      background: linear-gradient(90deg, #7c3aed, #ec4899, #fb923c, #ffd166);
+    }
+
+    /* 页面标题区 */
+    .page-hero {
+      padding: 60px 0 48px;
+      text-align: center;
+    }
+    .page-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      background: rgba(124, 58, 237, 0.08);
+      border: 1px solid rgba(124, 58, 237, 0.2);
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #7c3aed;
+      margin-bottom: 24px;
+    }
+    .page-tag::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #7c3aed;
+      border-radius: 50%;
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    .page-title {
+      font-size: 40px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 14px;
+      line-height: 1.15;
+    }
+    .page-title span {
+      color: #7c3aed;
+    }
+    .page-desc {
+      font-size: 16px;
+      color: #6b7280;
+      max-width: 540px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    /* 统计数字条 */
+    .stat-bar {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 56px;
+    }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .stat-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: #7c3aed;
+    }
+    .stat-label {
+      font-size: 13px;
+      color: #9ca3af;
+      font-weight: 500;
+    }
+    .stat-divider {
+      width: 1px;
+      height: 40px;
+      background: #e5e7eb;
+      align-self: center;
+    }
+
+    /* 入口卡片区 */
+    .entry-cards {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    .entry-card {
+      flex: 1;
+      min-width: 200px;
+      padding: 28px 24px;
+      background: #ffffff;
+      border-radius: 20px;
+      border: 1.5px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .entry-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(124,58,237,0.04) 0%, transparent 60%);
+      opacity: 0;
+      transition: 0.4s;
+    }
+    .entry-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(124, 58, 237, 0.2);
+      box-shadow: 0 12px 32px rgba(124, 58, 237, 0.1);
+    }
+    .entry-card:hover::after {
+      opacity: 1;
+    }
+    .entry-card.active {
+      border-color: #7c3aed;
+      box-shadow: 0 8px 28px rgba(124, 58, 237, 0.15);
+    }
+    .entry-card.active::after {
+      opacity: 1;
+    }
+    .entry-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      transition: 0.4s;
+    }
+    .entry-card:hover .entry-icon {
+      transform: scale(1.1);
+    }
+    .icon-purple { background: rgba(124, 58, 237, 0.1); }
+    .icon-green  { background: rgba(5, 150, 105, 0.1); }
+    .icon-orange { background: rgba(249, 115, 22, 0.1); }
+    .icon-blue   { background: rgba(37, 99, 235, 0.1); }
+
+    .entry-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111827;
+    }
+    .entry-card-desc {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+    .entry-arrow {
+      margin-top: auto;
+      font-size: 18px;
+      color: #7c3aed;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: 0.3s;
+    }
+    .entry-card:hover .entry-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* 主嵌入区 */
+    .embed-wrapper {
+      position: relative;
+    }
+    .embed-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      background: #f9fafb;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-bottom: none;
+      border-radius: 20px 20px 0 0;
+    }
+    .embed-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .embed-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .embed-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .embed-dot-red    { background: #ef4444; }
+    .embed-dot-yellow { background: #fbbf24; }
+    .embed-dot-green  { background: #22c55e; }
+    .embed-url-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 8px;
+      font-size: 13px;
+      color: #6b7280;
+      font-family: "Courier New", monospace;
+    }
+    .embed-url-icon {
+      width: 14px;
+      height: 14px;
+      border: 1.5px solid #22c55e;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      color: #22c55e;
+      flex-shrink: 0;
+    }
+    .embed-bar-right {
+      display: flex;
+      gap: 8px;
+    }
+    .embed-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #374151;
+      cursor: pointer;
+      transition: 0.25s;
+      text-decoration: none;
+    }
+    .embed-action-btn:hover {
+      background: #7c3aed;
+      color: #fff;
+      border-color: #7c3aed;
+    }
+
+    .iframe-container {
+      width: 100%;
+      height: 820px;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-top: none;
+      border-radius: 0 0 20px 20px;
+      overflow: hidden;
+      position: relative;
+      background: #f3f4f6;
+    }
+    .iframe-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* iframe 加载遮罩 */
+    .iframe-mask {
+      position: absolute;
+      inset: 0;
+      background: #f9fafb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      transition: opacity 0.5s ease;
+      z-index: 10;
+    }
+    .iframe-mask.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .loading-ring {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 4px solid rgba(124, 58, 237, 0.15);
+      border-top-color: #7c3aed;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .loading-text {
+      font-size: 15px;
+      color: #6b7280;
+      font-weight: 500;
+    }
+    .loading-sub {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-top: -12px;
+    }
+
+    /* 动画 */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(60px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- 顶部导航 -->
+<div class="header">
+  <div class="logo">数据洞察 <span>平台</span></div>
+  <div class="nav">
+    <a href="vue-charts.html" class="nav-item">可视化分析</a>
+    <div class="nav-item active">自助数据</div>
+    <a href="ai.html" class="nav-item">小助理</a>
+    
+    <!-- 返回主页 -->
+    <a href="index.html" class="back-btn">← 返回主页</a>
+  </div>
+</div>
+
+<!-- 渐变装饰栏 -->
+<div class="news-bar"></div>
+
+<!-- 页面内容 -->
+<div class="container">
+
+  <!-- 标题区 -->
+  <div class="page-hero">
+    <div class="page-tag">自助数据挖掘</div>
+    <div class="page-title">探索你的<span>教育数据</span></div>
+    <div class="page-desc">基于 Streamlit 构建的交互式数据探索平台，支持多维筛选、统计分析与可视化输出，助力教育决策。</div>
+    <div class="stat-bar">
+      <div class="stat-item">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">数据维度</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-num">实时</div>
+        <div class="stat-label">数据更新</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-num">可视化</div>
+        <div class="stat-label">交互分析</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-num">自定义</div>
+        <div class="stat-label">筛选导出</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 功能入口卡片 -->
+  <div class="entry-cards">
+    <div class="entry-card active" onclick="scrollToEmbed()">
+      <div class="entry-icon icon-purple">📊</div>
+      <div class="entry-card-title">数据探索</div>
+      <div class="entry-card-desc">多维度交互筛选，快速定位目标数据</div>
+      <div class="entry-arrow">→</div>
+    </div>
+    <div class="entry-card" onclick="scrollToEmbed()">
+      <div class="entry-icon icon-green">📈</div>
+      <div class="entry-card-title">统计分析</div>
+      <div class="entry-card-desc">自动生成统计摘要与趋势洞察</div>
+      <div class="entry-arrow">→</div>
+    </div>
+    <div class="entry-card" onclick="scrollToEmbed()">
+      <div class="entry-icon icon-orange">🎯</div>
+      <div class="entry-card-title">可视化图表</div>
+      <div class="entry-card-desc">丰富图表类型，支持动态交互展示</div>
+      <div class="entry-arrow">→</div>
+    </div>
+    <div class="entry-card" onclick="scrollToEmbed()">
+      <div class="entry-icon icon-blue">⬇️</div>
+      <div class="entry-card-title">数据导出</div>
+      <div class="entry-card-desc">一键导出分析结果，支持多种格式</div>
+      <div class="entry-arrow">→</div>
+    </div>
+  </div>
+
+  <!-- 嵌入区 -->
+  <div class="embed-wrapper" id="embed-section">
+    <!-- 浏览器风格标题栏 -->
+    <div class="embed-bar">
+      <div class="embed-bar-left">
+        <div class="embed-dots">
+          <div class="embed-dot embed-dot-red"></div>
+          <div class="embed-dot embed-dot-yellow"></div>
+          <div class="embed-dot embed-dot-green"></div>
+        </div>
+        <div class="embed-url-tag">
+          <div class="embed-url-icon">✓</div>
+          47.114.81.255:8501
+        </div>
+      </div>
+      <div class="embed-bar-right">
+        <button class="embed-action-btn" onclick="reloadFrame()">↺ 刷新</button>
+        <a class="embed-action-btn" href="http://47.114.81.255:8501/" target="_blank" rel="noopener">↗ 新窗口</a>
+      </div>
+    </div>
+
+    <!-- iframe 主体 -->
+    <div class="iframe-container">
+      <div class="iframe-mask" id="iframeMask">
+        <div class="loading-ring"></div>
+        <div class="loading-text">正在加载自助数据平台…</div>
+        <div class="loading-sub">首次加载约需 5–10 秒</div>
+      </div>
+      <iframe
+        id="dataFrame"
+        src="http://47.114.81.255:8501/"
+        title="自助数据挖掘平台"
+        allowfullscreen
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+
+</div>
+
+<!-- 底部 -->
+<div class="footer">
+  <a href="#">隐私政策</a>
+  <a href="#">服务条款</a>
+  <a href="#">联系我们</a>
+</div>
+<div class="footer-line"></div>
+
+<script>
+  // iframe 加载完成后隐藏遮罩
+  const frame = document.getElementById('dataFrame');
+  const mask  = document.getElementById('iframeMask');
+
+  frame.addEventListener('load', () => {
+    setTimeout(() => mask.classList.add('hidden'), 400);
+  });
+
+  // 兜底：10s 后强制隐藏遮罩（防止跨域 load 事件不触发）
+  setTimeout(() => mask.classList.add('hidden'), 10000);
+
+  // 刷新 iframe
+  function reloadFrame() {
+    mask.classList.remove('hidden');
+    frame.src = frame.src;
+  }
+
+  // 滚动到嵌入区
+  function scrollToEmbed() {
+    document.getElementById('embed-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+
+</body>
+</html>
