@@ -20,7 +20,6 @@
 # PIRLS raw and derived datasets
 pirls2021/P21_Data_R/Data/
 pirls2021/P21_Data_SAS/Data/
-01_数据文件/
 数据预处理/A5/
 数据预处理/ASG/
 数据预处理/R5/
@@ -47,6 +46,12 @@ pirls2021/P21_Data_SAS/Data/
 *.doc
 *.docx
 *.pptx
+
+# Public project data and references explicitly included
+!01_数据文件/
+!01_数据文件/**
+!02_参考资料/
+!02_参考资料/**
 
 # Editors and OS files
 .idea/
